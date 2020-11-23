@@ -6,8 +6,8 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "git://git.osmocom.org/rtl-sdr.git";
-    rev = "81833a1cf6288fee93a9157c0f60cafb5ec340b9";
-    sha256 = "0bk8lw5ykghg7a17l3wr8w4m0bj937sz062n9kv3fhw20b46y0p4";
+    rev = "0847e93e0869feab50fd27c7afeb85d78ca04631";
+    sha256 = "0xzy0xiirzhwb3kbx5cnlfvn76z2220j2asaz7pz2cnb7rrvyjx2";
   };
 
   nativeBuildInputs = [ pkgconfig ];

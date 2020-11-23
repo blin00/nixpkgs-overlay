@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     cp fr24feed $out/bin
-    ${radare2}/bin/r2 -Q -w -c '/ /bin/bash; s hit0_0; wz /bin/sh; / hostname -I; s hit1_0; wz hostname -i; / /sbin/rmmod; s hit2_0; wz #; wa nop @ 0x000fc7e4; wa ldr r1, [r3] @ 0x000fc7e8; wa ldr r2, [r3, 4] @ 0x000fc7ec' $out/bin/fr24feed
+    ${radare2}/bin/r2 -Q -w -c '/ /bin/bash; s hit0_0; wz /bin/sh; / hostname -I; s hit1_0; wz hostname -i; / /sbin/rmmod; s hit2_0; wx 2300; wa nop @ 0x000fc7e4; wa ldr r1, [r3] @ 0x000fc7e8; wa ldr r2, [r3, 4] @ 0x000fc7ec' $out/bin/fr24feed
   '';
 
   meta = {

@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, radare2 }: (
+{ lib, stdenv, fetchurl, radare2 }: (
 
-assert stdenv.lib.asserts.assertMsg (stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64) "fr24feed is only supported on ARM";
+assert lib.asserts.assertMsg (stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64) "fr24feed is only supported on ARM";
 
 stdenv.mkDerivation rec {
   pname = "fr24feed";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    license = stdenv.lib.licenses.unfree;
+    license = lib.licenses.unfree;
   };
 }
 

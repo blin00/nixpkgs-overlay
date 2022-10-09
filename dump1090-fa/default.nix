@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "dump1090-fa";
-  version = "3.7.2";
+  version = "7.2";
 
   src = fetchFromGitHub {
     owner = "flightaware";
     repo = "dump1090";
-    rev = "089684e20f4d44f328ca9b8242b2da33afc8662b";
+    rev = "849a3b73299b4f56620ab16a6b62d88e17f35608";
     sha256 = "0vlv9bd805kid202xxkrnl51rh02cyrl055gbcqlqgk51j5rrq8w";
   };
 

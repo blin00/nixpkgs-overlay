@@ -1,14 +1,14 @@
-{ python38, fetchFromGitHub }: (
+{ python310, fetchFromGitHub }: (
 
-python38.pkgs.buildPythonPackage rec {
+python310.pkgs.buildPythonPackage rec {
   pname = "mlat-client";
-  version = "0.3.1";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "adsbxchange";
     repo = "mlat-client";
-    rev = "84eb4e6903455397c0d3334075c78ef0f7875a2c";
-    sha256 = "1fa2sz5r658z2zhw349asjl5cfz9liai689ilpfg4sp775xkf20d";
+    rev = "faf9638fe8c2eafc2abdc45621ff879c7acb882b";
+    sha256 = "0v2f5ikl7salvvqxwq1n8v4z7p4m2yg6kxd5hpyd8pl1i6jwpzsp";
   };
 }
 

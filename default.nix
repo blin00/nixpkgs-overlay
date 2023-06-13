@@ -8,7 +8,7 @@ with super;
   fake-hwclock = callPackage (import ./fake-hwclock) {};
   fr24feed = callPackage (import ./fr24feed) {};
   mlat-client = callPackage (import ./mlat-client) {};
-  # rtl-sdr = callPackage (import ./rtl-sdr) {};
 
   owncast = callPackage (import ./owncast) {};
+  tor-monitor = callPackage (import ./tor-monitor) {};
 }

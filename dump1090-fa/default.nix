@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, libbladeRF, libusb, ncurses, rtl-sdr }:
+{ stdenv, fetchFromGitHub, pkg-config, libbladeRF, libusb, ncurses, rtl-sdr }:
 
 stdenv.mkDerivation rec {
   pname = "dump1090-fa";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "16ylywy2fdwf5kqr8kgl9lbzy1zwx4ckj9y122k3h86pfkswljs9";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ libbladeRF libusb ncurses rtl-sdr ];
 

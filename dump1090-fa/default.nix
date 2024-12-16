@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkg-config, libbladeRF, libusb, ncurses, rtl-sdr }:
+{ stdenv, fetchFromGitHub, pkg-config, libbladeRF, libusb1, ncurses, rtl-sdr }:
 
 stdenv.mkDerivation rec {
   pname = "dump1090-fa";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ libbladeRF libusb ncurses rtl-sdr ];
+  buildInputs = [ libbladeRF libusb1 ncurses rtl-sdr ];
 
   installPhase = ''
     mkdir -p $out/bin

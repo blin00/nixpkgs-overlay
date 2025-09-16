@@ -13,12 +13,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ libbladeRF libusb1 ncurses rtl-sdr ];
+  # omit stuff we don't use
+  buildInputs = [ libusb1 ncurses rtl-sdr ];
 
   installPhase = ''
-    mkdir -p $out/bin
+    runHook preInstall
+    mkdir -p $out/bin $out/share
     cp dump1090 view1090 $out/bin
+    cp -r public_html $out/share/dump1090
+    runHook postInstall
   '';
-  # mkdir -p $out/share
-  # cp -r public_html $out/share/dump1090
 }

@@ -8,6 +8,7 @@ with super;
   fake-hwclock = callPackage (import ./fake-hwclock) {};
   fr24feed = callPackage (import ./fr24feed) {};
   mlat-client = callPackage (import ./mlat-client) {};
+  piaware = callPackage (import ./piaware) {};
   tcllauncher = callPackage (import ./tcllauncher) {};
 
   owncast = callPackage (import ./owncast) {};

@@ -1,0 +1,109 @@
+diff --git a/package/fa_sysinfo.tcl b/package/fa_sysinfo.tcl
+index 8cb06bf..ae5e14e 100644
+--- a/package/fa_sysinfo.tcl
++++ b/package/fa_sysinfo.tcl
+@@ -6,7 +6,7 @@ namespace eval ::fa_sysinfo {
+ 	# filesystem_usage - return a list of mountpoint / percentage-used pairs
+ 	proc filesystem_usage {} {
+ 		set result [list]
+-		set fp [::fa_sudo::open_as "|/bin/df --output=target,pcent"]
++		set fp [::fa_sudo::open_as "|df --output=target,pcent"]
+ 		try {
+ 			gets $fp ;# skip header line
+ 			while {[gets $fp line] >= 0} {
+@@ -141,7 +141,7 @@ namespace eval ::fa_sysinfo {
+ 		# and everything else, in that order. If there's still a tie,
+ 		# use the interface name as a tiebreaker.
+ 
+-		if {[catch {set fp [::fa_sudo::open_as "|/sbin/ip -o link show"]} catchResult] == 1} {
++		if {[catch {set fp [::fa_sudo::open_as "|ip -o link show"]} catchResult] == 1} {
+ 			puts stderr "ip command not found on this version of Linux, you may need to install the iproute2 package and try again"
+ 			return ""
+ 		}
+diff --git a/programs/piaware/faup1090.tcl b/programs/piaware/faup1090.tcl
+index 9c80bb9..7d0de8f 100644
+--- a/programs/piaware/faup1090.tcl
++++ b/programs/piaware/faup1090.tcl
+@@ -63,7 +63,7 @@ proc connect_adsb_via_faup1090 {} {
+ 	}
+ 
+ 	# path to faup1090
+-	set path [auto_execok "/usr/lib/piaware/helpers/faup1090"]
++	set path [auto_execok [file join [file dirname [info script]] "helpers/faup1090"]]
+ 	if {$path eq ""} {
+ 		logger "No faup1090 found at $path, 1090ES support disabled"
+ 		return
+diff --git a/programs/piaware/faup978.tcl b/programs/piaware/faup978.tcl
+index fa2f933..2f64c0f 100644
+--- a/programs/piaware/faup978.tcl
++++ b/programs/piaware/faup978.tcl
+@@ -34,7 +34,7 @@ proc connect_uat_via_faup978 {} {
+ 	}
+ 
+ 	# path to faup978
+-	set path [auto_execok "/usr/lib/piaware/helpers/faup978"]
++	set path [auto_execok [file join [file dirname [info script]] "helpers/faup978"]]
+ 	if {$path eq ""} {
+ 		logger "No faup978 found at $path, UAT support disabled"
+ 		return
+diff --git a/programs/piaware/helpers.tcl b/programs/piaware/helpers.tcl
+index f3a1ad9..8154611 100644
+--- a/programs/piaware/helpers.tcl
++++ b/programs/piaware/helpers.tcl
+@@ -59,7 +59,7 @@ proc log_bgerror {message _options} {
+ proc greetings {} {
+ 	log_locally "****************************************************"
+ 	log_locally "piaware version $::piawareVersionFull is running, process ID [pid]"
+-	log_locally "your system info is: [::fa_sudo::exec_as /bin/uname --all]"
++	log_locally "your system info is: [::fa_sudo::exec_as uname --all]"
+ }
+ 
+ #
+diff --git a/programs/piaware/login.tcl b/programs/piaware/login.tcl
+index 61b625f..530232f 100644
+--- a/programs/piaware/login.tcl
++++ b/programs/piaware/login.tcl
+@@ -19,7 +19,7 @@ proc gather_login_info {_message} {
+ 	inspect_sockets_with_netstat
+ 
+ 	# construct some key-value pairs to be included.
+-	catch {set message(uname) [::fa_sudo::exec_as /bin/uname --all]}
++	catch {set message(uname) [::fa_sudo::exec_as uname --all]}
+ 
+ 	# from config.tcl
+ 	set message(piaware_version) $::piawareVersion
+diff --git a/programs/piaware/mlat.tcl b/programs/piaware/mlat.tcl
+index 11c1db4..6ef26af 100644
+--- a/programs/piaware/mlat.tcl
++++ b/programs/piaware/mlat.tcl
+@@ -15,7 +15,7 @@ set ::mlatRestartMillis 60000
+ # UDP transport info
+ set ::mlatUdpTransport {}
+ # path to fa-mlat-client
+-set ::mlatClientPath [auto_execok "/usr/lib/piaware/helpers/fa-mlat-client"]
++set ::mlatClientPath [auto_execok [file join [file dirname [info script]] "helpers/fa-mlat-client"]]
+ # current mlat status for the statusfile, one of:
+ #   not_enabled
+ #   not_running
+diff --git a/programs/piaware/update.tcl b/programs/piaware/update.tcl
+index 0e82512..a5bcc59 100644
+--- a/programs/piaware/update.tcl
++++ b/programs/piaware/update.tcl
+@@ -175,7 +175,7 @@ proc handle_update_request {type _row} {
+ #
+ proc reboot {} {
+     logger "rebooting..."
+-	::fa_sudo::exec_as -root -- /sbin/reboot &
++	::fa_sudo::exec_as -root -- reboot &
+ }
+ 
+ #
+@@ -183,7 +183,7 @@ proc reboot {} {
+ #
+ proc halt {} {
+ 	logger "halting..."
+-	::fa_sudo::exec_as -root -- /sbin/halt &
++	::fa_sudo::exec_as -root -- halt &
+ }
+ 
+ #

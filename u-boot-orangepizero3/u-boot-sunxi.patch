@@ -1,0 +1,32 @@
+diff --git a/board/sunxi/board.c b/board/sunxi/board.c
+index ac9cefc6eac..c75f79f1cfe 100644
+--- a/board/sunxi/board.c
++++ b/board/sunxi/board.c
+@@ -829,10 +829,9 @@ int misc_init_r(void)
+ 	/* Set fdtfile to match the FIT configuration chosen in SPL. */
+ 	spl_dt_name = get_spl_dt_name();
+ 	if (spl_dt_name) {
+-		char *prefix = IS_ENABLED(CONFIG_ARM64) ? "allwinner/" : "";
+ 		char str[64];
+ 
+-		snprintf(str, sizeof(str), "%s%s.dtb", prefix, spl_dt_name);
++		snprintf(str, sizeof(str), "%s.dtb", spl_dt_name);
+ 		env_set("fdtfile", str);
+ 	}
+ 
+diff --git a/include/configs/sunxi-common.h b/include/configs/sunxi-common.h
+index b29a25d5617..fc97eac1a3c 100644
+--- a/include/configs/sunxi-common.h
++++ b/include/configs/sunxi-common.h
+@@ -280,11 +280,7 @@
+ 	CONSOLE_STDIN_SETTINGS \
+ 	CONSOLE_STDOUT_SETTINGS
+ 
+-#ifdef CONFIG_ARM64
+-#define FDTFILE "allwinner/" CONFIG_DEFAULT_DEVICE_TREE ".dtb"
+-#else
+ #define FDTFILE CONFIG_DEFAULT_DEVICE_TREE ".dtb"
+-#endif
+ 
+ #define CFG_EXTRA_ENV_SETTINGS \
+ 	CONSOLE_ENV_SETTINGS \

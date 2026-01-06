@@ -9,6 +9,7 @@ with super;
   fa-mlat-client = callPackage (import ./fa-mlat-client) {};
   fr24feed = callPackage (import ./fr24feed) {};
   mlat-client = callPackage (import ./mlat-client) {};
+  mlucas = callPackage (import ./mlucas) {};
   owncast = callPackage (import ./owncast) {};
   piaware = callPackage (import ./piaware) {};
   tcllauncher = callPackage (import ./tcllauncher) {};

@@ -1,0 +1,36 @@
+diff --git a/src/net_processing.cpp b/src/net_processing.cpp
+index c99e983eb..314998d85 100644
+--- a/src/net_processing.cpp
++++ b/src/net_processing.cpp
+@@ -5,6 +5,7 @@
+ 
+ #include <net_processing.h>
+ 
++#include <array>
+ #include <addrman.h>
+ #include <arith_uint256.h>
+ #include <blockencodings.h>
+diff --git a/src/support/lockedpool.cpp b/src/support/lockedpool.cpp
+index d92ab02d6..1c7c92484 100644
+--- a/src/support/lockedpool.cpp
++++ b/src/support/lockedpool.cpp
+@@ -27,6 +27,7 @@
+ #endif
+ 
+ #include <algorithm>
++#include <stdexcept>
+ 
+ LockedPoolManager* LockedPoolManager::_instance = nullptr;
+ std::once_flag LockedPoolManager::init_flag;
+diff --git a/src/validation.h b/src/validation.h
+index abf4fb5c0..04f8f17b8 100644
+--- a/src/validation.h
++++ b/src/validation.h
+@@ -21,6 +21,7 @@
+ 
+ #include <algorithm>
+ #include <exception>
++#include <list>
+ #include <map>
+ #include <set>
+ #include <stdint.h>

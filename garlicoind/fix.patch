@@ -1,3 +1,18 @@
+diff --git a/src/chainparams.cpp b/src/chainparams.cpp
+index 12a53f50f..bbd2c980b 100644
+--- a/src/chainparams.cpp
++++ b/src/chainparams.cpp
+@@ -76,8 +76,8 @@ public:
+         strNetworkID = "main";
+         consensus.nSubsidyHalvingInterval = 690000;
+         consensus.BIP16Height = 0;
+-        consensus.BIP34Height = 0;
+-        consensus.BIP34Hash = uint256S("0x2ada80bf415a89358d697569c96eb98cdbf4c3b8878ac5722c01284492e27228");
++        consensus.BIP34Height = 1;
++        consensus.BIP34Hash = uint256S("0x5918e02d88ad28a3f43d69d2f5a4894f9c83fed70112d637ed7dec3069a54184");
+         consensus.BIP65Height = 0; // bab3041e8977e0dc3eeff63fe707b92bde1dd449d8efafb248c27c8264cc311a
+         consensus.BIP66Height = 0; // 7aceee012833fa8952f8835d8b1b3ae233cd6ab08fdb27a771d2bd7bdc491894
+         consensus.powLimit = uint256S("00000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
 diff --git a/src/net_processing.cpp b/src/net_processing.cpp
 index c99e983eb..314998d85 100644
 --- a/src/net_processing.cpp
@@ -10,6 +25,19 @@ index c99e983eb..314998d85 100644
  #include <addrman.h>
  #include <arith_uint256.h>
  #include <blockencodings.h>
+diff --git a/src/rpc/protocol.cpp b/src/rpc/protocol.cpp
+index ddc1bb623..296827259 100644
+--- a/src/rpc/protocol.cpp
++++ b/src/rpc/protocol.cpp
+@@ -73,7 +73,7 @@ static fs::path GetAuthCookieFile(bool temp=false)
+         arg += ".tmp";
+     }
+     fs::path path(arg);
+-    if (!path.is_complete()) path = GetDataDir() / path;
++    if (!path.is_absolute()) path = GetDataDir() / path;
+     return path;
+ }
+ 
 diff --git a/src/support/lockedpool.cpp b/src/support/lockedpool.cpp
 index d92ab02d6..1c7c92484 100644
 --- a/src/support/lockedpool.cpp
@@ -22,6 +50,28 @@ index d92ab02d6..1c7c92484 100644
  
  LockedPoolManager* LockedPoolManager::_instance = nullptr;
  std::once_flag LockedPoolManager::init_flag;
+diff --git a/src/util.cpp b/src/util.cpp
+index 5149cf307..31744ceb3 100644
+--- a/src/util.cpp
++++ b/src/util.cpp
+@@ -648,7 +648,7 @@ void ClearDatadirCache()
+ fs::path GetConfigFile(const std::string& confPath)
+ {
+     fs::path pathConfigFile(confPath);
+-    if (!pathConfigFile.is_complete())
++    if (!pathConfigFile.is_absolute())
+         pathConfigFile = GetDataDir(false) / pathConfigFile;
+ 
+     return pathConfigFile;
+@@ -687,7 +687,7 @@ void ArgsManager::ReadConfigFile(const std::string& confPath)
+ fs::path GetPidFile()
+ {
+     fs::path pathPidFile(gArgs.GetArg("-pid", BITCOIN_PID_FILENAME));
+-    if (!pathPidFile.is_complete()) pathPidFile = GetDataDir() / pathPidFile;
++    if (!pathPidFile.is_absolute()) pathPidFile = GetDataDir() / pathPidFile;
+     return pathPidFile;
+ }
+ 
 diff --git a/src/validation.h b/src/validation.h
 index abf4fb5c0..04f8f17b8 100644
 --- a/src/validation.h

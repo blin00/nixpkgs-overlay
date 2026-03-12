@@ -42,7 +42,8 @@ buildGoModule rec {
   ];
 
   postInstall = ''
-    ln -s ${website}/dist $out/public
+    mkdir -p $out/share/${pname}
+    ln -s ${website}/dist $out/share/${pname}/public
   '';
 
   meta = {

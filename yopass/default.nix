@@ -11,12 +11,14 @@ let
     hash = "sha256-Cof7Qk4dR7eX3xOvjK/fRmJQSwOKvmMb9BpNCyQcwn0=";
   };
 
+  src-website = "${src}/website";
+
   website = stdenv.mkDerivation {
     pname = "${pname}-website";
-    src = "${src}/website";
+    src = src-website;
     inherit version;
     offlineCache = fetchYarnDeps {
-      yarnLock = "${src}/yarn.lock";
+      yarnLock = "${src-website}/yarn.lock";
       hash = "sha256-D0iZXPoIekb+xNa4DKCobSB1zPIwgxagvtg4V7urEMg=";
     };
     nativeBuildInputs = [
@@ -32,7 +34,7 @@ let
     '';
   };
 in
-buildGoModule rec {
+buildGoModule {
   inherit pname version src;
 
   vendorHash = "sha256-2xNssM/0x+Pvm9gTpoBBgM12TAm1B5aohpHjPjVkHXg=";

@@ -16,4 +16,5 @@ with super;
   tcllauncher = callPackage (import ./tcllauncher) {};
   tor-monitor = callPackage (import ./tor-monitor) {};
   u-boot-orangepizero3 = callPackage (import ./u-boot-orangepizero3) {};
+  yopass = callPackage (import ./yopass) {};
 }

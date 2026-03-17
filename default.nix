@@ -18,4 +18,41 @@ with super;
   tor-monitor = callPackage (import ./tor-monitor) {};
   u-boot-orangepizero3 = callPackage (import ./u-boot-orangepizero3) {};
   yopass = callPackage (import ./yopass) {};
+
+  # https://github.com/NixOS/nixpkgs/pull/471091/changes
+  linuxPackages_rt_6_18 = pkgs.linuxPackagesFor (let linux = pkgs.linux_6_18; version = linux.version; in linux.override {
+    argsOverride = {
+      pname = "linux-rt";
+    };
+    structuredExtraConfig =
+      with lib.kernel;
+      (
+        {
+          # Enable expert mode (required by PREEMPT_RT, see kernel/Kconfig.preempt)
+          EXPERT = yes;
+          # Enable PREEMPT_RT
+          PREEMPT_RT = yes;
+        }
+        // (lib.optionalAttrs (lib.versionAtLeast version "6.12" && lib.versionOlder version "6.13") {
+          # Fix error: option not set correctly: PREEMPT_VOLUNTARY (wanted 'y', got 'n').
+          PREEMPT_VOLUNTARY = lib.mkForce no; # PREEMPT_RT and PREEMPT_VOLUNTARY are incompatible
+        })
+        // (lib.optionalAttrs (lib.versionAtLeast version "6.13") {
+          # Fix error: option not set correctly: PREEMPT (wanted 'n', got 'y').
+          PREEMPT = lib.mkForce yes;
+          # Fix error: error: unused option: PREEMPT_VOLUNTARY
+          PREEMPT_VOLUNTARY = lib.mkForce unset;
+        })
+        // (lib.optionalAttrs (lib.versionAtLeast version "6.12") {
+          # i915 GVT is incompatible with PREEMPT_RT
+          # https://lists.freedesktop.org/archives/intel-gfx/2022-February/289691.html
+          DRM_I915_GVT = lib.mkForce unset;
+          DRM_I915_GVT_KVMGT = lib.mkForce unset;
+        })
+        // (lib.optionalAttrs (lib.versionOlder version "6.12") {
+          # Fix error: unused option: RT_GROUP_SCHED.
+          RT_GROUP_SCHED = lib.mkForce (option no); # Removed by sched-disable-rt-group-sched-on-rt.patch.
+        })
+      );
+  });
 }

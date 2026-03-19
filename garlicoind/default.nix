@@ -18,8 +18,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "GarlicoinOrg";
     repo = "Garlicoin";
-    rev = "v0.18.0";
-    sha256 = "0gi3cmxakwrp0g7xab1myqqq77cr1mijsldvx8idnmn6ydlayyjz";
+    rev = "31985359cf2dceec7fd3b699698f9cf0baa59968";
+    sha256 = "sha256-tK84BHijDkjqfNPuB0bXYinthK+QzkjGmBFYWRqn/Hw=";
   };
 
   nativeBuildInputs = [

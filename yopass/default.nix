@@ -2,13 +2,13 @@
 
 let
   pname = "yopass";
-  version = "13.0.0";
+  version = "13.1.0";
 
   src = fetchFromGitHub {
     owner = "jhaals";
     repo = "yopass";
     rev = "${version}";
-    hash = "sha256-Cof7Qk4dR7eX3xOvjK/fRmJQSwOKvmMb9BpNCyQcwn0=";
+    hash = "sha256-oW012JUZun/TuXOVzadNaIa1z2fA9mp4pcylsCgppbs=";
   };
 
   src-website = "${src}/website";
@@ -19,7 +19,7 @@ let
     inherit version;
     offlineCache = fetchYarnDeps {
       yarnLock = "${src-website}/yarn.lock";
-      hash = "sha256-D0iZXPoIekb+xNa4DKCobSB1zPIwgxagvtg4V7urEMg=";
+      hash = "sha256-8VnAGidDOc6ScMJAhP66qgoZWEjJZDXlXXn0xKHmwe8=";
     };
     nativeBuildInputs = [
       yarnConfigHook
@@ -37,7 +37,7 @@ in
 buildGoModule {
   inherit pname version src;
 
-  vendorHash = "sha256-2xNssM/0x+Pvm9gTpoBBgM12TAm1B5aohpHjPjVkHXg=";
+  vendorHash = "sha256-IZnQy9vVqMcSHXLY9dVxPFRV7gJ8/niuOLOUJRhGJbg=";
   subPackages = [
     "./cmd/yopass"
     "./cmd/yopass-server"

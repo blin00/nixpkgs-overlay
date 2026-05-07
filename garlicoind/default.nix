@@ -48,6 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./fix_reindex.patch
     ./CVE-2024-52911.patch
     ./CVE-2024-35202.patch
+    ./CVE-2024-52912.patch
   ];
 
   enableParallelBuilding = true;

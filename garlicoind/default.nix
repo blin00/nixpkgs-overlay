@@ -43,7 +43,11 @@ stdenv.mkDerivation (finalAttrs: {
     "--disable-gui-tests"
   ];
 
-  patches = [ ./fix.patch ];
+  patches = [
+    ./fix_compile.patch
+    ./fix_reindex.patch
+    ./CVE-2024-52911.patch
+  ];
 
   enableParallelBuilding = true;
 

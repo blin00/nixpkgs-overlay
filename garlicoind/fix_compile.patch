@@ -1,0 +1,72 @@
+926053de037ad69ad8e9823f8839158e6cf6a7e7 compilation fixes
+diff --git a/src/net_processing.cpp b/src/net_processing.cpp
+index c99e983eb..b653dca17 100644
+--- a/src/net_processing.cpp
++++ b/src/net_processing.cpp
+@@ -7,6 +7,7 @@
+ 
+ #include <addrman.h>
+ #include <arith_uint256.h>
++#include <array>
+ #include <blockencodings.h>
+ #include <chainparams.h>
+ #include <consensus/validation.h>
+diff --git a/src/rpc/protocol.cpp b/src/rpc/protocol.cpp
+index ddc1bb623..296827259 100644
+--- a/src/rpc/protocol.cpp
++++ b/src/rpc/protocol.cpp
+@@ -73,7 +73,7 @@ static fs::path GetAuthCookieFile(bool temp=false)
+         arg += ".tmp";
+     }
+     fs::path path(arg);
+-    if (!path.is_complete()) path = GetDataDir() / path;
++    if (!path.is_absolute()) path = GetDataDir() / path;
+     return path;
+ }
+ 
+diff --git a/src/support/lockedpool.cpp b/src/support/lockedpool.cpp
+index d92ab02d6..1c7c92484 100644
+--- a/src/support/lockedpool.cpp
++++ b/src/support/lockedpool.cpp
+@@ -27,6 +27,7 @@
+ #endif
+ 
+ #include <algorithm>
++#include <stdexcept>
+ 
+ LockedPoolManager* LockedPoolManager::_instance = nullptr;
+ std::once_flag LockedPoolManager::init_flag;
+diff --git a/src/util.cpp b/src/util.cpp
+index 5149cf307..31744ceb3 100644
+--- a/src/util.cpp
++++ b/src/util.cpp
+@@ -648,7 +648,7 @@ void ClearDatadirCache()
+ fs::path GetConfigFile(const std::string& confPath)
+ {
+     fs::path pathConfigFile(confPath);
+-    if (!pathConfigFile.is_complete())
++    if (!pathConfigFile.is_absolute())
+         pathConfigFile = GetDataDir(false) / pathConfigFile;
+ 
+     return pathConfigFile;
+@@ -687,7 +687,7 @@ void ArgsManager::ReadConfigFile(const std::string& confPath)
+ fs::path GetPidFile()
+ {
+     fs::path pathPidFile(gArgs.GetArg("-pid", BITCOIN_PID_FILENAME));
+-    if (!pathPidFile.is_complete()) pathPidFile = GetDataDir() / pathPidFile;
++    if (!pathPidFile.is_absolute()) pathPidFile = GetDataDir() / pathPidFile;
+     return pathPidFile;
+ }
+ 
+diff --git a/src/validation.h b/src/validation.h
+index abf4fb5c0..04f8f17b8 100644
+--- a/src/validation.h
++++ b/src/validation.h
+@@ -21,6 +21,7 @@
+ 
+ #include <algorithm>
+ #include <exception>
++#include <list>
+ #include <map>
+ #include <set>
+ #include <stdint.h>

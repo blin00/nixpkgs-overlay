@@ -6,6 +6,7 @@ with super;
   agnos = callPackage (import ./agnos) {};
   chrony-nts-pool = callPackage (import ./chrony-nts-pool) {};
   chrony-wait = callPackage (import ./chrony-wait) {};
+  cpuminer-opt = callPackage (import ./cpuminer-opt) {};
   dump1090-fa = callPackage (import ./dump1090-fa) {};
   fake-hwclock = callPackage (import ./fake-hwclock) {};
   fa-mlat-client = callPackage (import ./fa-mlat-client) {};

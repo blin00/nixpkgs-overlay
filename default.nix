@@ -20,6 +20,12 @@ with super;
   u-boot-orangepizero3 = callPackage (import ./u-boot-orangepizero3) {};
   yopass = callPackage (import ./yopass) {};
 
+  tor-awslc = (pkgs.tor.override {
+    openssl = pkgs.aws-lc;
+  }).overrideAttrs (oldAttrs: {
+    patches = (oldAttrs.patches or []) ++ [ ./tor-awslc.patch ];
+  });
+
   # https://github.com/NixOS/nixpkgs/pull/471091/changes
   linuxPackages_rt_6_18 = pkgs.linuxPackagesFor (let linux = pkgs.linux_6_18; version = linux.version; in linux.override {
     argsOverride = {

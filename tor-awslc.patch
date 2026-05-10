@@ -1,0 +1,143 @@
+diff --git a/src/lib/crypt_ops/aes_openssl.c b/src/lib/crypt_ops/aes_openssl.c
+index fd481b8758..5c0ed8447c 100644
+--- a/src/lib/crypt_ops/aes_openssl.c
++++ b/src/lib/crypt_ops/aes_openssl.c
+@@ -34,7 +34,9 @@ DISABLE_GCC_WARNING("-Wredundant-decls")
+ #include <openssl/aes.h>
+ #include <openssl/evp.h>
+ #include <openssl/engine.h>
++#ifndef OPENSSL_IS_AWSLC
+ #include <openssl/modes.h>
++#endif
+ 
+ ENABLE_GCC_WARNING("-Wredundant-decls")
+ 
+@@ -153,8 +155,10 @@ void
+ aes_cipher_set_iv_aligned(aes_cnt_cipher_t *cipher_, const uint8_t *iv)
+ {
+   EVP_CIPHER_CTX *cipher = (EVP_CIPHER_CTX *) cipher_;
+-#ifdef LIBRESSL_VERSION_NUMBER
++#if defined(LIBRESSL_VERSION_NUMBER)
+   EVP_CIPHER_CTX_set_iv(cipher, iv, 16);
++#elif defined(OPENSSL_IS_AWSLC)
++  tor_assert(EVP_CipherInit_ex(cipher, NULL, NULL, NULL, iv, -1) == 1);
+ #else
+   // We would have to do this if the cipher's position were not aligned:
+   // EVP_CIPHER_CTX_set_num(cipher, 0);
+diff --git a/src/lib/crypt_ops/crypto_openssl_mgt.c b/src/lib/crypt_ops/crypto_openssl_mgt.c
+index b89167a5ec..6e70c448cc 100644
+--- a/src/lib/crypt_ops/crypto_openssl_mgt.c
++++ b/src/lib/crypt_ops/crypto_openssl_mgt.c
+@@ -301,7 +301,7 @@ int
+ crypto_openssl_late_init(int useAccel, const char *accelName,
+                          const char *accelDir)
+ {
+-#ifndef LIBRESSL_VERSION_NUMBER
++#if !defined(LIBRESSL_VERSION_NUMBER) && !defined(OPENSSL_IS_AWSLC)
+   if (tor_OpenSSL_version_num() < OPENSSL_V_SERIES(3,0,0)) {
+     log_warn(LD_CRYPTO, "Running with OpenSSL version \"%s\", "
+              "which is no longer maintained by the OpenSSL project. "
+diff --git a/src/lib/tls/tortls_openssl.c b/src/lib/tls/tortls_openssl.c
+index d18a112325..09584b3950 100644
+--- a/src/lib/tls/tortls_openssl.c
++++ b/src/lib/tls/tortls_openssl.c
+@@ -573,6 +573,10 @@ tor_tls_context_new(crypto_pk_t *identity, unsigned int key_lifetime,
+         OPENSSL_V_SERIES(3,5,0),
+         "?*X25519MLKEM768 / ?SecP256r1MLKEM768 / *P-256:?X25519:P-224"
+       },
++#ifdef OPENSSL_IS_AWSLC
++      // AWS-LC does not support ?, *, /
++      { 0, "X25519MLKEM768:SecP256r1MLKEM768:P-256:X25519:P-224" },
++#endif
+       { 0, "P-256:X25519:P-224" },
+       { 0, "P-256:P-224" },
+     };
+diff --git a/src/test/test_crypto.c b/src/test/test_crypto.c
+index 3cbfe882ab..78470c88dd 100644
+--- a/src/test/test_crypto.c
++++ b/src/test/test_crypto.c
+@@ -35,6 +35,7 @@
+ #if defined(ENABLE_OPENSSL)
+ #include "lib/crypt_ops/compat_openssl.h"
+ DISABLE_GCC_WARNING("-Wredundant-decls")
++#include <openssl/bn.h>
+ #include <openssl/dh.h>
+ ENABLE_GCC_WARNING("-Wredundant-decls")
+ #endif /* defined(ENABLE_OPENSSL) */
+@@ -234,6 +235,8 @@ test_crypto_openssl_version(void *arg)
+   const char *h_version = crypto_openssl_get_header_version_str();
+   tt_assert(version);
+   tt_assert(h_version);
++  if (!strcmpstart(version, "AWS-LC"))
++    return;
+   if (strcmpstart(version, h_version)) { /* "-fips" suffix, etc */
+     TT_DIE(("OpenSSL library version %s did not begin with header version %s.",
+             version, h_version));
+@@ -1419,8 +1422,10 @@ test_crypto_pk_invalid_private_key(void *arg)
+   setup_capture_of_logs(LOG_WARN);
+   tt_int_op(-1, OP_EQ,
+             crypto_pk_read_private_key_from_string(pk, pem, strlen(pem)));
+-#ifdef ENABLE_NSS
++#if defined(ENABLE_NSS)
+   expect_single_log_msg_containing("received bad data");
++#elif defined(OPENSSL_IS_AWSLC)
++  expect_log_msg_containing("while decoding private key");
+ #else
+   expect_single_log_msg_containing("while checking RSA key");
+ #endif
+diff --git a/src/test/test_crypto_openssl.c b/src/test/test_crypto_openssl.c
+index 22b5bc28ee..b8a57279a7 100644
+--- a/src/test/test_crypto_openssl.c
++++ b/src/test/test_crypto_openssl.c
+@@ -31,8 +31,8 @@ test_crypto_rng_engine(void *arg)
+ 
+   /* We should correct the method if it's a dummy. */
+   RAND_set_rand_method(&dummy_method);
+-#ifdef LIBRESSL_VERSION_NUMBER
+-  /* On libressl, you can't override the RNG. */
++#if defined(LIBRESSL_VERSION_NUMBER) || defined(OPENSSL_IS_AWSLC)
++  /* On libressl and aws-lc, you can't override the RNG. */
+   tt_assert(RAND_get_rand_method() == RAND_OpenSSL());
+   tt_int_op(0, OP_EQ, crypto_force_rand_ssleay());
+ #else
+diff --git a/src/test/test_tortls_openssl.c b/src/test/test_tortls_openssl.c
+index c54842d5b7..e3fcc25b51 100644
+--- a/src/test/test_tortls_openssl.c
++++ b/src/test/test_tortls_openssl.c
+@@ -46,7 +46,11 @@ ENABLE_GCC_WARNING("-Wredundant-decls")
+ #include "test/log_test_helpers.h"
+ #include "test/test_tortls.h"
+ 
++#ifdef OPENSSL_IS_AWSLC
++#define SSL_STATE_STR "TLS client start_connect"
++#else
+ #define SSL_STATE_STR "before SSL initialization"
++#endif
+ 
+ /* Every version and fork of OpenSSL we support now qualifies as "opaque",
+  * in that it hides the members of important structures.
+@@ -240,6 +244,7 @@ test_tortls_allocate_tor_tls_object_ex_data_index(void *ignored)
+   (void)0;
+ }
+ 
++#ifndef OPENSSL_OPAQUE
+ static void
+ test_tortls_log_one_error(void *ignored)
+ {
+@@ -322,6 +327,7 @@ test_tortls_log_one_error(void *ignored)
+     tor_free(tls->address);
+   tor_free(tls);
+ }
++#endif /* !defined(OPENSSL_OPAQUE) */
+ 
+ #ifndef OPENSSL_OPAQUE
+ static void
+@@ -1712,7 +1718,7 @@ struct testcase_t tortls_openssl_tests[] = {
+   LOCAL_TEST_CASE(get_state_description, TT_FORK),
+   LOCAL_TEST_CASE(get_by_ssl, TT_FORK),
+   LOCAL_TEST_CASE(allocate_tor_tls_object_ex_data_index, TT_FORK),
+-  LOCAL_TEST_CASE(log_one_error, TT_FORK),
++  INTRUSIVE_TEST_CASE(log_one_error, TT_FORK),
+   INTRUSIVE_TEST_CASE(get_error, TT_FORK),
+   LOCAL_TEST_CASE(always_accept_verify_cb, 0),
+   INTRUSIVE_TEST_CASE(x509_cert_free, 0),

@@ -17,7 +17,7 @@ tmp_file="$tmp_dir/$(basename "$tgt")"
 # 2. Copy the source without dereferencing (-P)
 # 3. Set owner and group without dereferencing (-h)
 # If either fails, clean up the temp directory and abort
-cp -P "$src" "$tmp_file" && chown -h "$user:$group" "$tmp_file" || { rm -rf "$tmp_dir"; exit 1; }
+cp -P --preserve=timestamps "$src" "$tmp_file" && chown -h "$user:$group" "$tmp_file" || { rm -rf "$tmp_dir"; exit 1; }
 
 # 4. Set permissions (Skip if it's a symlink)
 if [ ! -h "$tmp_file" ]; then

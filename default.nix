@@ -8,6 +8,7 @@ with super;
   chrony-wait = callPackage (import ./chrony-wait) {};
   cpuminer-opt = callPackage (import ./cpuminer-opt) {};
   dump1090-fa = callPackage (import ./dump1090-fa) {};
+  electrumx = callPackage (import ./electrumx) {};
   fake-hwclock = callPackage (import ./fake-hwclock) {};
   fa-mlat-client = callPackage (import ./fa-mlat-client) {};
   fr24feed = callPackage (import ./fr24feed) {};

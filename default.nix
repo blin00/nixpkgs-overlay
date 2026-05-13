@@ -21,8 +21,19 @@ with super;
   u-boot-orangepizero3 = callPackage (import ./u-boot-orangepizero3) {};
   yopass = callPackage (import ./yopass) {};
 
-  tor-awslc = (pkgs.tor.override {
-    openssl = pkgs.aws-lc;
+  aws-lc = super.aws-lc.overrideAttrs (finalAttrs: previousAttrs: {
+    version = "1.73.0";
+    src = fetchFromGitHub {
+      owner = "aws";
+      repo = "aws-lc";
+      rev = "v${finalAttrs.version}";
+      hash = "sha256-fDDkAN/dIqcvAWCE23zveQB5ZPOAesAxSk9GRJzTDzw=";
+    };
+    outputs = [ "out" ]; # needed for 1.71.0 and above, otherwise cycle detected
+  });
+
+  tor-awslc = (super.tor.override {
+    openssl = self.aws-lc;
   }).overrideAttrs (oldAttrs: {
     patches = (oldAttrs.patches or []) ++ [ ./tor-awslc.patch ];
   });

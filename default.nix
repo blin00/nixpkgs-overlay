@@ -18,7 +18,6 @@ with super;
   piaware = callPackage (import ./piaware) {};
   tcllauncher = callPackage (import ./tcllauncher) {};
   tor-monitor = callPackage (import ./tor-monitor) {};
-  u-boot-orangepizero3 = callPackage (import ./u-boot-orangepizero3) {};
   yopass = callPackage (import ./yopass) {};
 
   aws-lc = super.aws-lc.overrideAttrs (finalAttrs: previousAttrs: {
@@ -32,6 +31,7 @@ with super;
     outputs = [ "out" ]; # needed for 1.71.0 and above, otherwise cycle detected
   });
 
+  # do not use to run a relay (weird connection drops)
   tor-awslc = (super.tor.override {
     openssl = self.aws-lc;
   }).overrideAttrs (oldAttrs: {

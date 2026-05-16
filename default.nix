@@ -63,4 +63,26 @@ with super;
         }
       );
   });
+
+  linuxPackages_sbc_6_18 = let version = "6.18.31"; in pkgs.linuxPackagesFor (pkgs.linuxManualConfig {
+    inherit version;
+    pname = "linux-sbc";
+    src = pkgs.fetchurl {
+      url = "mirror://kernel/linux/kernel/v${lib.versions.major version}.x/linux-${version}.tar.xz";
+      hash = "sha256-oKC4bUhdQJz8xr4/6FzfI7ilmWt416IywOA9KovyWLY=";
+    };
+    # enabled:
+    # * CONFIG_CRYPTO_DEV_SUN8I_CE_HASH/PRNG/TRNG
+    # * CONFIG_CRYPTO_DEV_SUN8I_SS_HASH/PRNG
+    # * CONFIG_SUN50I_IOMMU
+    # changed:
+    # * CONFIG_SUN50I_H6_PRCM_PPU from m to y
+    # * NR_CPUS from 384 to 64
+    # disabled: a bunch of random stuff
+    configfile = ./sbc.config;
+    kernelPatches = [
+      kernelPatches.bridge_stp_helper
+      kernelPatches.request_key_helper
+    ];
+  });
 }

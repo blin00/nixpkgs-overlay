@@ -32,10 +32,10 @@ with super;
   });
 
   # do not use to run a relay (weird connection drops)
-  tor-awslc = (super.tor.override {
+  tor-awslc = (tor.override {
     openssl = self.aws-lc;
-  }).overrideAttrs (oldAttrs: {
-    patches = (oldAttrs.patches or []) ++ [ ./tor-awslc.patch ];
+  }).overrideAttrs (previousAttrs: {
+    patches = (previousAttrs.patches or []) ++ [ ./tor-awslc.patch ];
   });
 
   # https://github.com/NixOS/nixpkgs/pull/471091/changes
@@ -64,7 +64,7 @@ with super;
       );
   });
 
-  linuxPackages_sbc_6_18 = let version = "6.18.31"; in pkgs.linuxPackagesFor (pkgs.linuxManualConfig {
+  linuxPackages_sbc_6_18 = let version = "6.18.31"; in pkgs.linuxPackagesFor ((pkgs.linuxManualConfig {
     inherit version;
     pname = "linux-sbc";
     src = pkgs.fetchurl {
@@ -84,5 +84,15 @@ with super;
       kernelPatches.bridge_stp_helper
       kernelPatches.request_key_helper
     ];
-  });
+  }).overrideAttrs (finalAttrs: previousAttrs: {
+    passthru = {
+      configEnv = finalAttrs.finalPackage.overrideAttrs (previousAttrs: {
+        nativeBuildInputs = previousAttrs.nativeBuildInputs or [ ]
+          ++ [
+            pkg-config
+            ncurses
+          ];
+      });
+    };
+  }));
 }

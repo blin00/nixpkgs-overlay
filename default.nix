@@ -87,7 +87,7 @@ with super;
       kernelPatches.request_key_helper
     ];
   }).overrideAttrs (finalAttrs: previousAttrs: {
-    passthru = {
+    passthru = previousAttrs.passthru // {
       configEnv = finalAttrs.finalPackage.overrideAttrs (previousAttrs: {
         nativeBuildInputs = previousAttrs.nativeBuildInputs or [ ]
           ++ [

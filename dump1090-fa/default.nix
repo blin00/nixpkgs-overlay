@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-kTJ8FMugBRJaxWas/jEj4E5TmVnNpNdhq4r2YFFwgTU=";
   };
 
+  patches = [ ./werror.patch ];
+
   nativeBuildInputs = [ pkg-config ];
 
   # omit stuff we don't use

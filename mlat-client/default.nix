@@ -10,6 +10,8 @@ python311.pkgs.buildPythonApplication rec {
     rev = "v${version}";
     hash = "sha256-V//LpYmBXtT8haX1aZ4XldzzyUY2YN7x3lTpQ2csTmw=";
   };
+  patches = [ ./fix.patch ];
+
   pyproject = true;
   build-system = [ python311.pkgs.setuptools ];
 }

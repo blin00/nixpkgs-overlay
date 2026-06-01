@@ -1,0 +1,13 @@
+diff --git a/Makefile b/Makefile
+index c21ae3a..74ed4a0 100644
+--- a/Makefile
++++ b/Makefile
+@@ -3,7 +3,7 @@ PROGNAME=dump1090
+ DUMP1090_VERSION ?= unknown
+ 
+ CFLAGS ?= -O3 -g
+-DUMP1090_CFLAGS := -std=c11 -fno-common -Wall -Wmissing-declarations -Werror -Wformat-signedness -W
++DUMP1090_CFLAGS := -std=c11 -fno-common -Wall -Wmissing-declarations -Wformat-signedness -W
+ DUMP1090_CPPFLAGS := -I. -D_POSIX_C_SOURCE=200112L -DMODES_DUMP1090_VERSION=\"$(DUMP1090_VERSION)\" -DMODES_DUMP1090_VARIANT=\"dump1090-fa\"
+ 
+ LIBS = -lpthread -lm

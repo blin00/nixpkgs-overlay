@@ -4,11 +4,11 @@ assert lib.asserts.assertMsg (stdenv.hostPlatform.isAarch64) "fr24feed is only s
 
 stdenv.mkDerivation rec {
   pname = "fr24feed";
-  version = "1.0.54-0";
+  version = "1.0.56-0";
 
   src = fetchurl {
     url = "https://repo-feed.flightradar24.com/rpi_binaries/fr24feed_${version}_arm64.tgz";
-    hash = "sha256-se7WgYa8U5SOhYvUJ5giREL9INNq/U5nRegSKDBNL6s=";
+    hash = "sha256-qQS5J0109hn4SfXDujwMNCUYKO+IU1jPxjwcKYDanNc=";
   };
 
   nativeBuildInputs = [ radare2 ];

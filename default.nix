@@ -21,12 +21,12 @@ with super;
   yopass = callPackage (import ./yopass) {};
 
   aws-lc = super.aws-lc.overrideAttrs (finalAttrs: previousAttrs: {
-    version = "1.73.0";
+    version = "5.0.0";
     src = fetchFromGitHub {
       owner = "aws";
       repo = "aws-lc";
       rev = "v${finalAttrs.version}";
-      hash = "sha256-fDDkAN/dIqcvAWCE23zveQB5ZPOAesAxSk9GRJzTDzw=";
+      hash = "sha256-Dvy6mzEfKgimxCGp7q2fPk9urBMJMU6gZmaZXwdZfWw=";
     };
     outputs = [ "out" ]; # needed for 1.71.0 and above, otherwise cycle detected
   });

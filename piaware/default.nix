@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-Sogq3g3374LEhCgID2p/B3ryBCr3e+omQf+pJIbYX28=";
   };
 
-  nativeBuildInputs = [ openssl tcl ];
-  buildInputs = [ dump1090-fa mlat-client tcllauncher tcl.tclPackageHook tclPackages.tcllib tclPackages.tcltls tclPackages.tclx ];
+  nativeBuildInputs = [ openssl ];
+  buildInputs = [ dump1090-fa mlat-client tcllauncher tcl tcl.tclPackageHook tclPackages.tcllib tclPackages.tcltls tclPackages.tclx ];
   phases = [ "unpackPhase" "patchPhase" "installPhase" "fixupPhase" ];
 
   patches = [ ./helpers-path.patch ];

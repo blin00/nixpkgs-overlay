@@ -28,7 +28,10 @@ with super;
       rev = "v${finalAttrs.version}";
       hash = "sha256-Dvy6mzEfKgimxCGp7q2fPk9urBMJMU6gZmaZXwdZfWw=";
     };
-    outputs = [ "out" ]; # needed for 1.71.0 and above, otherwise cycle detected
+    postInstall = ''
+      moveToOutput lib/crypto/cmake "$dev"
+      moveToOutput lib/ssl/cmake "$dev"
+    '';
   });
 
   # do not use to run a relay (weird connection drops)

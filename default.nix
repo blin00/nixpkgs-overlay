@@ -21,12 +21,12 @@ with super;
   yopass = callPackage (import ./yopass) {};
 
   aws-lc = super.aws-lc.overrideAttrs (finalAttrs: previousAttrs: {
-    version = "5.0.0";
+    version = "5.3.0";
     src = fetchFromGitHub {
       owner = "aws";
       repo = "aws-lc";
       rev = "v${finalAttrs.version}";
-      hash = "sha256-Dvy6mzEfKgimxCGp7q2fPk9urBMJMU6gZmaZXwdZfWw=";
+      hash = "sha256-5LkoppiMyDVg5QODmSTB5v9WNVJKk8wmjENCAcfMajg=";
     };
     postInstall = ''
       moveToOutput lib/crypto/cmake "$dev"

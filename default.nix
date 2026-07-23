@@ -67,12 +67,12 @@ with super;
       );
   });
 
-  linuxPackages_sbc_6_18 = let version = "6.18.37"; in pkgs.linuxPackagesFor ((pkgs.linuxManualConfig {
+  linuxPackages_sbc_6_18 = let version = "6.18.39"; in pkgs.linuxPackagesFor ((pkgs.linuxManualConfig {
     inherit version;
     pname = "linux-sbc";
     src = pkgs.fetchurl {
       url = "mirror://kernel/linux/kernel/v${lib.versions.major version}.x/linux-${version}.tar.xz";
-      hash = "sha256-qDzSAOZkbbUoZrgwnpE3uekEi2E8vaEM7SuBGq4SUlU=";
+      hash = "sha256-p6fj0q6dledBlyI6jU619r56rCG25t4n6WhdABwfjLA=";
     };
     # enabled (from n):
     # * CONFIG_CRYPTO_DEV_SUN8I_CE_HASH/PRNG/TRNG

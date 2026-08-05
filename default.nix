@@ -12,6 +12,7 @@ with super;
   fake-hwclock = callPackage (import ./fake-hwclock) {};
   fr24feed = callPackage (import ./fr24feed) {};
   garlicoind = callPackage (import ./garlicoind) {};
+  gratttool = callPackage (import ./gratttool) {};
   install-safe = callPackage (import ./install-safe) {};
   mlat-client = callPackage (import ./mlat-client) {};
   mlucas = callPackage (import ./mlucas) {};

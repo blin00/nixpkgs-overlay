@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "piaware";
-  version = "11.0";
+  version = "11.1";
 
   src = fetchFromGitHub {
     owner = "flightaware";
     repo = "piaware";
     rev = "v${version}";
-    hash = "sha256-Sogq3g3374LEhCgID2p/B3ryBCr3e+omQf+pJIbYX28=";
+    hash = "sha256-FRgqz2aZdMrIJXRFtTTc6xdzIGvN8eJ/RrWJd7oD27k=";
   };
 
   nativeBuildInputs = [ openssl ];

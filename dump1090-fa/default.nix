@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dump1090-fa";
-  version = "11.0";
+  version = "11.1";
 
   src = fetchFromGitHub {
     owner = "flightaware";
     repo = "dump1090";
     rev = "v${version}";
-    hash = "sha256-kTJ8FMugBRJaxWas/jEj4E5TmVnNpNdhq4r2YFFwgTU=";
+    hash = "sha256-A6nkct7jvpPtPZ+iM2UKVckIXgNxxq5sxhyPiw5+EZk=";
   };
 
   patches = [ ./werror.patch ];

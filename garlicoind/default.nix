@@ -4,7 +4,7 @@
   fetchFromGitHub,
   autoreconfHook,
   pkg-config,
-  boost178,
+  boost182,
   db4,
   libevent,
   openssl,
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    boost178
+    boost182
     db4
     libevent
     openssl
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   configureFlags = [
-    "--with-boost-libdir=${boost178}/lib"
+    "--with-boost-libdir=${boost182}/lib"
     "--without-miniupnpc"
     "--disable-bench"
     "--disable-tests"

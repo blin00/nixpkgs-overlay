@@ -18,7 +18,7 @@ let
         '';
       });
     };
-  in pkgs.python312.override {inherit packageOverrides; self = python;};
+  in pkgs.python314.override {inherit packageOverrides; self = python;};
 in
 stdenv.mkDerivation rec {
   name = "tor-monitor";

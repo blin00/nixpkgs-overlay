@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "garlicoind";
-  version = "0.18.0";
+  version = "0.18.5";
 
   src = fetchFromGitHub {
-    owner = "GarlicoinOrg";
+    owner = "garlicoin";
     repo = "Garlicoin";
-    rev = "31985359cf2dceec7fd3b699698f9cf0baa59968";
-    sha256 = "sha256-tK84BHijDkjqfNPuB0bXYinthK+QzkjGmBFYWRqn/Hw=";
+    rev = "a4881b1c39d049aa1737088c1a183762630a9f8a";
+    hash = "sha256-05hc4hgVJlpN03xr7AN5Qnj82I6wGjtLdTWUS4OhXuc=";
   };
 
   nativeBuildInputs = [
@@ -46,8 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     ./fix_compile.patch
     ./fix_reindex.patch
-    ./CVE-2024-52911.patch
-    ./CVE-2024-35202.patch
+    # ./CVE-2024-52911.patch
+    # ./CVE-2024-35202.patch
     ./CVE-2024-52912.patch
   ];
 

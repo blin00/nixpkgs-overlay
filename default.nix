@@ -35,6 +35,16 @@ with super;
     '';
   });
 
+  meshtastic = super.meshtastic.overridePythonAttrs (finalAttrs: previousAttrs: {
+    version = "2.7.11";
+    src = fetchFromGitHub {
+      owner = "meshtastic";
+      repo = "python";
+      tag = finalAttrs.version;
+      hash = "sha256-jHtGbG5W4KoX4pYr9WfrY56tlr2nhvhM0DeDddMOvis=";
+    };
+  });
+
   # do not use to run a relay (weird connection drops)
   tor-awslc = (tor.override {
     openssl = self.aws-lc;
